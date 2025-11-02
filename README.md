@@ -4,7 +4,9 @@ for the convencience of myself (eliana) and others (but mostly myself (eliana))
 
 ## Requirements
 definitely you'll need [ffmpeg](https://www.ffmpeg.org/) and the [textgrid python package](https://github.com/kylebgorman/textgrid) for all of these.
-there's more specific requirements for specific tools but they are Few i think and will only be specified when the tool is brought up
+there's more specific requirements for specific tools but they are Few i think and will only be specified when the tool is brought up.
+
+ffmpeg is a separate tool that has os-dependent ways to install it but the textgrid library can be installed with the pip package manager as follows: `pip install textgrid`
 
 ## Slicer
 a command line tool to slice wav and textgrid files into slices of your desired length. you use it like this
@@ -18,6 +20,15 @@ a command line tool to transcribe wav files into textgrids with interval tiers. 
 ```
 transcriber.py file.wav
 ```
+### requirements:
+alongside the requirements listed at the beginning, this tool also makes use of OpenAI's first actual open source model, [whisper](https://github.com/openai/whisper), which by consequence also requires the [pytorch](https://pytorch.org/) package. you can install them like this
+```
+pip install pytorch
+pip install -U openai-whisper
+```
+
 to-do:
  - have forced alignment done in the tool
  - option for doing an entire folder's worth of audio
+
+# More Soon
