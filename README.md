@@ -13,4 +13,11 @@ slicer.py textgrid_folder wav_foler length_in_seconds
 ```
 or you can use it with no arguments as long as you have your textgrids and wavs in 2 separate folders and also no other textgrids and wavs in subfolders and also you're okay with 120 second slices
 
-# More Soon
+## Transcriber
+a command line tool to transcribe wav files into textgrids with interval tiers. you use it like this
+```
+transcriber.py file.wav
+```
+to-do:
+ - have forced alignment done in the tool
+ - option for doing an entire folder's worth of audio
