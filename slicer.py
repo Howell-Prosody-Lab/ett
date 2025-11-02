@@ -52,14 +52,14 @@ if not os.path.exists('out'):
 
 # load files
 textgrids = glob.glob(sys.argv[1] + "/*TextGrid")
-wavs = glob.glob(sys.argv[2] + "/*wav")
+audio = glob.glob(sys.argv[2] + "/*wav")
 # default options
 if len(sys.argv) == 1:
     textgrids = glob.glob("*/*TextGrid")
     audio = glob.glob("*/*wav")
 elif len(sys.argv) == 4:
     textgrids = glob.glob(sys.argv[1] + "/*TextGrid")
-    wavs = glob.glob(sys.argv[2] + "/*wav")
+    audio = glob.glob(sys.argv[2] + "/*wav")
     length = int(sys.argv[3])
 # error checking
 else:
@@ -83,8 +83,7 @@ if (len(textgrids) != len(audio)):
 
 for i in range(0,len(textgrids)):
   tg = textgrid.TextGrid.fromFile(textgrids[i])
-  audiofile = os.path.basename(textgrids[i])[:-9] + '.wav'
-  audiofile = "wavs/" + os.path.basename(audiofile)
+  audiofile = sys.argv[2] + "/" + os.path.basename(textgrids[i])[:-9] + '.wav'
   if not os.path.exists(audiofile):
     print("hey where's the wav file for " + textgrids[i] + "?")
     break
@@ -105,7 +104,7 @@ for i in range(0,len(textgrids)):
   start = random.randrange(lbound, ubound)
 
   tg_out = "out/" + os.path.basename(textgrids[i])[:-9] + "_sliced.TextGrid"
-  au_out = "out/" + os.path.basename(audio[i])[:-4] + "_sliced.wav"
+  au_out = "out/" + os.path.basename(textgrids[i])[:-9] + "_sliced.wav"
 
   # gaming
   sliceTg(tg, start, length).write(tg_out)
