@@ -15,6 +15,15 @@ slicer.py textgrid_folder wav_foler length_in_seconds
 ```
 or you can use it with no arguments as long as you have your textgrids and wavs in 2 separate folders and also no other textgrids and wavs in subfolders and also you're okay with 120 second slices
 
+## Splitter (WIP)
+a command line tool used to split wav and textgrid files into their left and right components. this tool assumes you are using stereo wav files and textgrids with at least two interval tiers.
+```
+splitter.py textgrd_folder wav_foley
+```
+to-do:
+ - option to split individual wav/textgrids
+ - better way of checking if textgrid tiers are meant for the left or right channel
+
 ## Transcriber
 a command line tool to transcribe wav files into textgrids with interval tiers. you use it like this
 ```
