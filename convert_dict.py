@@ -1,6 +1,6 @@
 class Utterance:
     end = 1000000000
-    transcript = []
+    transcript = ""
     
     def __init__(self, position, filename, speaker, start):
         self.position = position
@@ -38,9 +38,10 @@ def process_utterances(d, filename, speaker):
             file_transcript.update({utt_num:[]})
             spaced_start = max(d_starts[j]-0.0001,0)
             i = Utterance(utt_num, filename, speaker, spaced_start)
-            h = []
+            h = ""
         file_transcript[utt_num].append(d_text[j])
-        h.append(d_text[j])
+        h+=(d_text[j])
+        h+=(" ")
         is_boundary = d_next_starts[j] - d_ends[j] > 2
         if is_boundary:
             spaced_end = min(d_ends[j]+0.0001, d_ends[-1])

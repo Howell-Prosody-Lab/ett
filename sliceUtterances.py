@@ -87,7 +87,7 @@ def just_one_moneypenney(audiofile, tg_file_path, save_file_gen_path, d, word_ti
   # Runs on a single file instead of a folder full of them, allows for
   # integration into autorpt. Splits a wav file into its component utterances
   # and transcript by pulling from its combined csv file.
-  # Args: path-like string wav_file_path, path-like string tg_file_path,
+  # Args: path-like string audiofile, path-like string tg_file_path,
   #   path-like string save_file_gen_path, dictionary d, string word_tier,
   #   string phone_tier.
   # Returns: none. Outputs a folder of audio, textgrid, and txt files.
@@ -95,8 +95,9 @@ def just_one_moneypenney(audiofile, tg_file_path, save_file_gen_path, d, word_ti
   #print("begin just_one_moneypenney")
   tg = textgrid.TextGrid.fromFile(tg_file_path)
   #print("files:",tg, audiofile)
-  file_name = os.path.basename(wav_file_path)[:-4] 
+  file_name = os.path.basename(audiofile)[:-4] 
   file_dir = os.path.join(save_file_gen_path, "sliced-utterance-output",file_name)
+  speaker_Id = word_tier[0:4]
   #print(file_name)
   #print(file_dir)
   if not os.path.exists(file_dir):
@@ -104,27 +105,31 @@ def just_one_moneypenney(audiofile, tg_file_path, save_file_gen_path, d, word_ti
   os.chdir(file_dir)
 
   #print("switching to process_utterances")
-  data, transcript = convert_dict.process_utterances(d, file_name, word_tier[0:4]) #word_tier[0:4] is the speaker ID
+  data, transcript = convert_dict.process_utterances(d, file_name, speaker_Id) 
   #print("back from process_utterances\n")
   
-  f = open(f"{file_name}.txt", "w")   
+  #f = open(f"{file_name}.txt", "w")   
   length = len(data)
   tiers = (word_tier, phone_tier)
   for i in range(length):
-    utterance_name = file_name + f"_int{i}"
+    utterance_name = file_name + f"_utt{i}"
     tg_out = os.path.join(file_dir,(utterance_name + ".TextGrid"))
     au_out = os.path.join(file_dir,(utterance_name + ".wav"))
     #print(f"about to call sliceTg on utterance {i} with {data[i].start}, {data[i].end}")
     sliced_text_object = sliceTg(tg, data[i].start, data[i].end, tiers)
     sliced_text_object.write(tg_out)
     sliceAudio(audiofile, data[i].start, data[i].end, au_out)
-    f.write(f'{i}\n')
-    for j in range(len(transcript[i])):
-      f.write(transcript[i][j])
-      f.write(' ')
-    f.write('\n')
+    g = open(f"{utterance_name}.txt", "w")
+    g.write(data[i].transcript)
+    g.close()
+    #uncomment the following block and the open and close for a file transcript
+##    f.write(f'{i}\n')
+##    for j in range(len(transcript[i])):
+##      f.write(transcript[i][j])
+##      f.write(' ')
+##    f.write('\n')
     
-  f.close()
+  #f.close()
   #print("end just_one_moneypenney")                        
     
 def main():
@@ -176,10 +181,10 @@ def test():
   gen_wav_path = f.readline()[0:-1]
   save_file_gen_path = f.readline()[0:-1]
   f.close()
-  tg_file_path = os.path.join(gen_textgrid_path, "1213p48mx92zr82pv.TextGrid")
-  wav_file_path = os.path.join(gen_wav_path, "1213p48mx92zr82pv_1.wav")
-  word_tier = "92zr - words"
-  phone_tier = "92zr - phones"
+  tg_file_path = os.path.join(gen_textgrid_path, "1213p02fm02kw09rl.TextGrid")
+  wav_file_path = os.path.join(gen_wav_path, "1213p02fm02kw09rl_2.wav")
+  word_tier = "09rl - words"
+  phone_tier = "09rl - phones"
   d = convert_dict.open_csv()
   just_one_moneypenney(wav_file_path, tg_file_path, save_file_gen_path, d, word_tier, phone_tier)
     
