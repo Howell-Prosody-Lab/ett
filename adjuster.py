@@ -17,7 +17,11 @@ for i in range(len(tg[4])):
   while j < len(tg[rtier]) and tg[rtier][j].maxTime < point.time:
     j += 1
 
-  if j < len(tg[rtier]) and tg[rtier][j].minTime <= point.time <= tg[rtier][j].maxTime:
-    point.time = (tg[rtier][j].minTime + tg[rtier][j].maxTime) / 2
+# prominence is centered
+  if j < len(tg[rtier]) and tg[rtier][j].minTime <= point.time <= tg[rtier][j].maxTime and '*' in point.mark:
+    tg[4][i].time = (tg[rtier][j].minTime + tg[rtier][j].maxTime) / 2
+# boundaries are put at the End
+  elif j < len(tg[rtier]) and tg[rtier][j].minTime <= point.time <= tg[rtier][j].maxTime and ']' in point.mark:
+    tg[4][i].time = tg[rtier][j].maxTime
 
 tg.write(tgFile[:-9]+'_adjusted.TextGrid')
