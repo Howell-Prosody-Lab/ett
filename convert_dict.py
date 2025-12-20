@@ -26,23 +26,32 @@ def process_utterances(d, filename, speaker):
     d_next_starts = d["next_start"]
 
     objs = []
-    
 
     file_transcript = {}
     reset = True
     utt_num = 0
 
     for j in range(0, len(d_intervals)):
-        
-        if reset == True:
-            file_transcript.update({utt_num:[]})
-            spaced_start = max(d_starts[j]-0.0001,0)
-            i = Utterance(utt_num, filename, speaker, spaced_start)
-            h = ""
-        file_transcript[utt_num].append(d_text[j])
-        h+=(d_text[j])
-        h+=(" ")
-        is_boundary = d_next_starts[j] - d_ends[j] > 2
+        text = d_text[j]       
+        if text != "[bracketed]":
+      
+            if reset == True:
+                file_transcript.update({utt_num:[]})
+                spaced_start = max(d_starts[j]-0.0001,0)
+                i = Utterance(utt_num, filename, speaker, spaced_start)
+                h = ""
+            
+            h+=(text)
+            h+=(" ")
+            try:
+                file_transcript[utt_num].append(text)
+            except KeyError:
+                file_transcript.update({utt_num:[]})
+                file_transcript[utt_num].append(text)
+                file_transcript[utt_num].append("KeyError thrown; created entry")
+                print("KeyError thrown; created entry; check file transcript")
+        # This is where the utterance boundary size is determined
+        is_boundary = d_next_starts[j] - d_ends[j] > 1
         if is_boundary:
             spaced_end = min(d_ends[j]+0.0001, d_ends[-1])
             i.end = spaced_end
@@ -87,7 +96,7 @@ def open_csv():
             d["start"].append(float(row[9]))
             d["end"].append(float(row[10]))
             d["next_start"].append(float(row[11]))
-    print("open_csv:",d)
+    #print("open_csv:",d)
     return (d)
 
 
